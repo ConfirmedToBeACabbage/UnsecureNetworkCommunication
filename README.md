@@ -21,3 +21,8 @@ Fundementally we have this situation:
 - [User 2] decrypts this information using the private key
 
 All of this will be done over a simple HTTP server in an effort to simulate an unsecure network.   
+
+# Resources 
+
+https://www.geeksforgeeks.org/computer-networks/advanced-encryption-standard-aes/
+https://www.geeksforgeeks.org/computer-networks/public-key-encryption/

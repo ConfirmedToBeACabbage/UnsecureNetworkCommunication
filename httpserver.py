@@ -1,0 +1,20 @@
+from fastapi import FastAPI, Request 
+
+app = FastAPI()
+
+# A pool of public keyys that are associated with the client host ip 
+publickeypool = {}
+
+# A pool of private keys which are associated with the public keys
+privatekeycorrelate = {}
+
+# Method to remove the key 
+def removekey() {}
+
+# Using fast api as a quick http server with routes. This will be the receiving server.
+@app.get("/ping")
+def pingandpublic(req: Request): # Should private the public key back to the user
+    pool[req.client.host] = "Some public key" # This is the private key we're serving
+    privatekeycorrelate["Some public key"] = "private key" # The correlation we're doing with the private and public key
+    return {"message": "Thank you for the ping!" + req.client.host}
+
