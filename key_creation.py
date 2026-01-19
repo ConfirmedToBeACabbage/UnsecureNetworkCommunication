@@ -61,3 +61,9 @@ def CreatePublicPrivate():
     cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
     return cipher
 """
+
+# === Local test (do not run in production) ===
+# if __name__ == "__main__":
+#     pub, priv = CreatePublicPrivate()
+#     print(pub[:50])
+#     print(priv[:50])
