@@ -26,3 +26,6 @@ All of this will be done over a simple HTTP server in an effort to simulate an u
 
 https://www.geeksforgeeks.org/computer-networks/advanced-encryption-standard-aes/
 https://www.geeksforgeeks.org/computer-networks/public-key-encryption/
+
+## Information for cryptography
+https://cryptography.io/en/latest/
