@@ -31,7 +31,7 @@ Man in the middle can hurt this process. However this is where certificate autho
 (5) Decrypt on the server and present it as proof! 
 """ 
 
-parameters = NULL
+parameters = {}
 private_key = ''
 public_key = ''
 session_key = ''

@@ -6,14 +6,14 @@ import os
 
 def EncryptMSSG(key, msg):
     iv = os.urandom(32)
-    cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
+    cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
     encryptor = cipher.encryptor()
     ct = encryptor.update(msg) + encryptor.finalize()
     return ct
     
 def DecryptMSG(key, msg): 
     iv = os.urandom(32)
-    cipher = Cipher(algorithms.AES(key), modes.CBC(iv), backend=default_backend())
+    cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
     decryptor = cipher.decryptor()
     ct = decryptor.update(msg) + decryptor.finalize()
     return ct 

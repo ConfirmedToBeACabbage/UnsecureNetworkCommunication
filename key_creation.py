@@ -25,7 +25,7 @@ def PerformHKDF(private_key, public_key):
 def CreatePublicPrivate(parameters_pass):
     parameters = dh.generate_parameters(generator=2, key_size=2048)
     
-    if parameters_pass != NULL: 
+    if parameters_pass != {}: 
         parameters = parameters_pass
 
     private_key = parameters.generate_private_key()

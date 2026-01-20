@@ -14,7 +14,7 @@ session_key = ''
 async def pingandpublic(req: Request): # Should private the public key back to the user
 
     # We received the ping, we generate a public and private key 
-    pubk, privk, parameters = CreatePublicPrivate(NULL)
+    pubk, privk, parameters = CreatePublicPrivate({})
     public_key = pubk # This is the public key we're serving
     private_key = privk 
 
