@@ -10,26 +10,27 @@ from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 
 def CreateAESKey(): 
     key = os.urandom(32)
-    iv = os.urandom(32)
     return key 
 
 def PerformHKDF(private_key, public_key): 
-    shared_key = private_key.exchange(peer_public_key)
+    shared_key = private_key.exchange(public_key)
     derived_key = HKDF(
         algorithm=hashes.SHA256(),
         length=32,
         salt=None,
         info=b'handshake data',
     ).derive(shared_key)
+    return derived_key
 
 def CreatePublicPrivate(parameters_pass):
     parameters = dh.generate_parameters(generator=2, key_size=2048)
     
-    if parameters != NULL: 
+    if parameters_pass != NULL: 
         parameters = parameters_pass
 
     private_key = parameters.generate_private_key()
-    peer_public_key = parameters.generate_private_key().public_key()
+    public_key = private_key.public_key()
+
     return private_key, public_key, parameters
 
 
@@ -43,11 +44,11 @@ def CreatePublicPrivate(parameters_pass):
 # Returns values only (no file I/O) so other modules can use them
 # ===============================
 def CreatePublicPrivate():
-    """
+    
     Generates an RSA public/private key pair.
     Returns:
         [public_key_pem_str, private_key_pem_str]
-    """
+
 
     # Step 1: Generate RSA private key
     private_key = rsa.generate_private_key(

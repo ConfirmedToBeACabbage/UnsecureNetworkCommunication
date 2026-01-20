@@ -1,5 +1,7 @@
 from fastapi import FastAPI, Request 
 import uvicorn
+from key_creation import PerformHKDF, CreatePublicPrivate
+from mssg_encryption import EncryptMSSG, DecryptMSG
 
 app = FastAPI()
 
@@ -17,10 +19,9 @@ async def pingandpublic(req: Request): # Should private the public key back to t
     private_key = privk 
 
     # this is incase we have a session key, aka the second handshake
-    if session_key != '' { 
+    if session_key != '': 
         pubk = EncryptMSSG(session_key, pubk)
         parameters = EncryptMSSG(session_key, parameters)
-    }
 
     return {"pubk": pubk, "parameters": parameters}
 
