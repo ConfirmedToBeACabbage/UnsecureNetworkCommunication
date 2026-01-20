@@ -9,32 +9,6 @@ private_key = ''
 public_key = ''
 session_key = ''
 
-logging.basicConfig(level=logging.INFO)  # Set the logging level
-logger = logging.getLogger(__name__)  # Create a logger
-
-'''
-TODO 
-
-    # Serialize the public key
-    pub_key_serialized = public_key.public_bytes(
-        encoding=serialization.Encoding.PEM,
-        format=serialization.PublicFormat.SubjectPublicKeyInfo
-    )
-
-    # Send back
-    "public_key": pub_key_serialized.decode('utf-8'),  # For response as a string
-
-    # This is on the receiving end
-    public_key = serialization.load_pem_public_key(
-        pem_public_key_str.encode('utf-8')
-    )
-
-    # Encode in hex
-    aes_key = aes_key.hex()
-
-    # Then decode in hex
-    aes_key = bytes.fromhex(encryption_request.aes_key)  # Convert from hex to bytes
-'''
 
 # Using fast api as a quick http server with routes. This will be the receiving server.
 @app.get("/ping")
@@ -44,7 +18,7 @@ async def pingandpublic(req: Request): # Should private the public key back to t
     pubk, privk, parameters = CreatePublicPrivate({})
     public_key = pubk # This is the public key we're serving
     private_key = privk 
-    logger.info("[SERVER] Public Key: " + public_key + " | Private Key: " + private_key + " | Parameters: " + parameters)
+    print("[SERVER] Public Key: " + public_key + " | Private Key: " + private_key + " | Parameters: " + parameters)
     
     # this is incase we have a session key, aka the second handshake
     if session_key != '': 
