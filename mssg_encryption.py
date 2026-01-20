@@ -1,6 +1,6 @@
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from cryptography.hazmat.primitives import padding
-import os
+import os, base64
 
 # The Iv can be thought of as almost a salt. It's inserted with the plain text alongside the key
 # into the algorithm to then get a random cipher each time. 
@@ -13,8 +13,12 @@ def EncryptMSSG(key, msg):
     cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
     encryptor = cipher.encryptor()
     ct = encryptor.update(padded_data) + encryptor.finalize()
-    return ct
     
+    # We need to properly return this
+    iv_ct = iv + ct 
+    
+    return base64.b64encode(iv_ct)
+
 def DecryptMSG(key, msg): 
     unpadder = padding.PKCS7(128).unpadder()
     data = unpadder.update(msg)
