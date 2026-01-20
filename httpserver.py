@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request 
-import uvicorn
+import uvicorn, threading
 from key_creation import PerformHKDF, CreatePublicPrivate
 from mssg_encryption import EncryptMSSG, DecryptMSG
 
@@ -58,5 +58,8 @@ async def receivepublic(req: Request):
     return {"message": "Success!"}
 
 
-def beginserver(): 
+def beginserver(e): 
     uvicorn.run(app, host="127.0.0.1", port=8000, log_level="info")
+    if e.set(): 
+        return
+

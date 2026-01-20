@@ -98,6 +98,7 @@ if __name__ == "__main__":
 
     # We should start the server on a seperate thread
     e = threading.Event()
-    t1 = threading.Thread(target=beginserver)
-
+    t1 = threading.Thread(target=beginserver, args=(e,))
+    t1.start()
+    
     demonstration()
