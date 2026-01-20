@@ -1,7 +1,9 @@
-import requests, threading, time
+import requests, threading, time, asyncio
 from httpserver import beginserver
 from key_creation import CreateAESKey, PerformHKDF, CreatePublicPrivate
-from mssg_encryption import EncryptMSSG, DecryptMSG
+from mssg_encryption import EncryptMSSG
+from encodedecode import encodeaesk, encodepubk, decodepubk
+from logtofile import initfilesend, printtofile
 # This is going to be the source file where we combine all packages to get a simple transaction working 
 
 """
@@ -36,24 +38,29 @@ private_key = ''
 public_key = ''
 session_key = ''
 
-def handshake(): 
+async def handshake(): 
+    global private_key, public_key, session_key, parameters
     url = "http://localhost:8000/ping"
     
     # First we ping the fastapi
-    print("[CLIENT] REQUESTING SERVER FOR HANDSHAKE BEGIN")
+    printtofile("[CLIENT] REQUESTING SERVER FOR HANDSHAKE BEGIN")
     response = requests.get(url)
 
     # We receive the public key 
     convert = response.json()
     public_key = convert["pubk"] # We are storing the public key 
-    parameters = convert["parameters"] # Storing the shared parameters
-    print("[CLIENT] Public Key: " + public_key + " Parameters: " + parameters)
+    parameters = decodepubk(public_key).parameters()
+    printtofile("[CLIENT] Public Key: " + str(public_key) + " Parameters: " + str(public_key.parameters()))
 
     # Generate the private and public key
     pubk, privk = CreatePublicPrivate(parameters)
 
+    # Encode the public key in a format that works
+    encodepubk(pubk)
+
     # Storing the private key
     private_key = privk
+    printtofile("[CLIENT] Private Key: " + str(private_key))
 
     # Send back the server the public key
     url = "http://localhost:8000/public"
@@ -67,35 +74,48 @@ def handshake():
     # Now that we've sent the post, we can generate on our end the session key
     session_key = PerformHKDF()
 
-def demonstration():
-    
+async def demonstration():
+    global private_key, public_key, session_key, parameters
+    printtofile("[CLIENT] Beginning a handshake!")
     # Do one handshake
-    handshake()
+    await handshake()
 
+    printtofile("[CLIENT] Doing DH twice for forward secrecy")
     # However now that we've done this once 
     # For forward secrecy we do it again with the session key
-    handshake()
+    await handshake()
+    
+    printtofile("[CLIENT] Now that we have a second session open, we will encrypt a message using AES and send it over")
+    # Ensuring session_key is in bytes form
+    session_key = session_key.encode('utf-8')
 
+    printtofile("[CLIENT] Session Key: " + str(session_key))
     # Now that we have forward secrecy and everything established, we can do the cipher send
     mssg = b"Hello!"
 
     # Create a cipher and a key
     key = CreateAESKey()
-
+    
     # Encrypt using the cipher
     emsg = EncryptMSSG(key, mssg)
 
     # We now encrypt it with the session key y
     ekey = EncryptMSSG(session_key, key)
     emsg = EncryptMSSG(session_key, emsg)
+    
+    ekey = encodeaesk(key)
 
     # Send this information over
     url = "http://localhost:8000/msg"
     response = requests.post(url, json={"ekey": ekey, "emsg": emsg})
 
+    # End the server
     e.set()
 
 if __name__ == "__main__":
+
+    # Init the file for output
+    initfilesend()
 
     # We should start the server on a seperate thread
     e = threading.Event()
@@ -103,6 +123,6 @@ if __name__ == "__main__":
     t1.start()
 
     # Let the server start
-    time.sleep(5)
+    time.sleep(2)
 
-    demonstration()
+    asyncio.run(demonstration())

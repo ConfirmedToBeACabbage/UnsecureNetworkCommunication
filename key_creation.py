@@ -9,7 +9,7 @@ from cryptography.hazmat.primitives.kdf.hkdf import HKDF
 
 
 def CreateAESKey(): 
-    key = os.urandom(32)
+    key = os.urandom(16)
     return key 
 
 def PerformHKDF(private_key, public_key): 
@@ -31,7 +31,7 @@ def CreatePublicPrivate(parameters_pass):
     private_key = parameters.generate_private_key()
     public_key = private_key.public_key()
 
-    return private_key, public_key, parameters
+    return private_key, public_key
 
 
 """
