@@ -19,27 +19,14 @@ import httpserver
 
     (3) Both the server and the client produce a shared session key using HKDF 
     
+    Repeat this process again! Using the session key provided. 
+
     The session is now secured with foward secrecy. This is because each side generates a shared session using a public key associated with the other side. 
     Man in the middle can hurt this process. However this is where certificate authorities (CA) come into use. You can confirm the authenticity of the certificate with an authority. 
 
-    (3) Encrypt cipher with public key 
-    (4) Send cipher to server
-    (5) Server decrypts the msg with private key and saves the cipher
-    (6) Client uses cipher to encrypt the msg 
-    (7) Client encrypts with public key the msg on top of the cipher
-    (8) Client sends server the msg 
-    (9) Server receives, decrypts with private key and then uses cipher to decrypt msg 
-     
-     
-     Method for development: 
-     
-     - Key_creation has methods which
-        def CreateAESKey() (This creates a cipher key)
-        def CreatePublicPrivate() (This creates a public key and a mathematically associated private key)
-        
-     - mssg_encryption has methods which
-        def EncryptMSSG(cipher: Cipher, msg) (Takes in a cipher of class Cipher from the cryptography package), this encrypts a message using a cipher
-        def DecryptMSG(cipher: Cipher, msg) (Takes in a cipher of class Cipher from the cryptography package), this decrypts a message using the cipher
+    (3) Encrypt a message with a key
+    (4) Send that message to the server alongside the key, on the new session key
+    (5) Decrypt on the server and present it as proof! 
     """ 
 
 parameters = NULL
@@ -102,12 +89,6 @@ def demonstration():
     # Send this information over
     url = "http://localhost:8000/msg"
     response = requests.post(url, json={"ekey": ekey, "emsg": emsg})
-
-
-
-    
-    
-    
 
 if __name__ == "__main__":
     httpserver.beginserver() # We are starting the server
