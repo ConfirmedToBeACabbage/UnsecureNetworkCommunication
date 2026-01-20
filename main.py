@@ -1,4 +1,4 @@
-import requests
+import requests, threading
 from httpserver import beginserver
 from key_creation import CreateAESKey, PerformHKDF, CreatePublicPrivate
 from mssg_encryption import EncryptMSSG, DecryptMSG
@@ -92,6 +92,12 @@ def demonstration():
     url = "http://localhost:8000/msg"
     response = requests.post(url, json={"ekey": ekey, "emsg": emsg})
 
+    e.set()
+
 if __name__ == "__main__":
-    beginserver() # We are starting the server
+
+    # We should start the server on a seperate thread
+    e = threading.Event()
+    t1 = threading.Thread(target=beginserver)
+
     demonstration()
