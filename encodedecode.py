@@ -1,4 +1,5 @@
 from cryptography.hazmat.primitives.serialization import load_pem_public_key, load_pem_parameters, Encoding, PublicFormat
+import base64
 
 '''
 TODO 
@@ -25,14 +26,12 @@ TODO
 '''
 
 # Encoding and decoding the public key
-def encodepubk(publickey):
-    print("[ANY] ENCODING A PUBLIC KEY") 
-    return publickey.public_bytes(
-        encoding = Encoding.PEM,
-        format = PublicFormat.SubjectPublicKeyInfo)
+def pubktopem(publickey):
+    return publickey.public_bytes(encoding = Encoding.PEM, format = PublicFormat.SubjectPublicKeyInfo)
 
-def decodepubk(pempublickey):
-    return load_pem_public_key(pempublickey.encode('utf-8'))
+def loadpubk(pempublickey):
+    pempublickey = pempublickey.encode('utf-8')
+    return load_pem_public_key(pempublickey)
     
 # Encoding and decoding the aes key
 def encodeaesk(aeskey):

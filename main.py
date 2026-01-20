@@ -2,7 +2,7 @@ import requests, threading, time, asyncio
 from httpserver import beginserver
 from key_creation import CreateAESKey, PerformHKDF, CreatePublicPrivate
 from mssg_encryption import EncryptMSSG
-from encodedecode import encodeaesk, encodepubk, decodepubk
+from encodedecode import encodeaesk, pubktopem, loadpubk
 from logtofile import initfilesend, printtofile
 # This is going to be the source file where we combine all packages to get a simple transaction working 
 
@@ -48,19 +48,19 @@ async def handshake():
 
     # We receive the public key 
     convert = response.json()
-    public_key = convert["pubk"] # We are storing the public key 
-    parameters = decodepubk(public_key).parameters()
-    printtofile("[CLIENT] Public Key: " + str(public_key) + " Parameters: " + str(public_key.parameters()))
+    public_key = loadpubk(convert["pubk"]) # We are storing the public key 
+    parameters = public_key.parameters()
+    printtofile("[CLIENT] Public Key: " + convert["pubk"])
 
     # Generate the private and public key
-    pubk, privk = CreatePublicPrivate(parameters)
+    privk, pubk = CreatePublicPrivate(parameters)
 
     # Encode the public key in a format that works
-    encodepubk(pubk)
+    pubk = pubktopem(pubk)
 
     # Storing the private key
     private_key = privk
-    printtofile("[CLIENT] Private Key: " + str(private_key))
+    printtofile("[CLIENT] Private Key: " + private_key.decode('utf-8'))
 
     # Send back the server the public key
     url = "http://localhost:8000/public"
@@ -123,6 +123,6 @@ if __name__ == "__main__":
     t1.start()
 
     # Let the server start
-    time.sleep(2)
+    time.sleep(1)
 
     asyncio.run(demonstration())

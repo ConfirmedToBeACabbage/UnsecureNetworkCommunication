@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request  # type: ignore
 from key_creation import PerformHKDF, CreatePublicPrivate
 from mssg_encryption import EncryptMSSG, DecryptMSG
-from encodedecode import encodepubk, decodepubk, decodeaesk
+from encodedecode import pubktopem, loadpubk, decodeaesk
 from logtofile import printtofile
 import uvicorn # type: ignore
 
@@ -23,7 +23,7 @@ async def pingandpublic(req: Request): # Should private the public key back to t
     public_key = pubk # This is the public key we're serving
     private_key = privk 
 
-    pubk = encodepubk(pubk)
+    pubk = pubktopem(pubk)
     printtofile("[SERVER] Public Key: " + str(pubk))
     
     # this is incase we have a session key, aka the second handshake
@@ -31,17 +31,17 @@ async def pingandpublic(req: Request): # Should private the public key back to t
         pubk = EncryptMSSG(session_key, pubk)
         parameters = EncryptMSSG(session_key, parameters)
 
-    return {"pubk": str(pubk)}
+    return {"pubk": pubk.decode('utf-8')}
 
 @app.post("/public")
 async def receivepublic(req: Request):
-    global session_key
+    global session_key, public_key
 
     # We have received the public key 
     body = await req.json()
 
     # Set the public key
-    public_key = decodepubk(body.get("pubk"))
+    public_key = loadpubk(body.get("pubk"))
 
     # Now that we have the public key we can perform the HKDF for a session key
     session_key = PerformHKDF()
