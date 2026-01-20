@@ -1,5 +1,7 @@
 import os 
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
+from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
 
 def CreateAESKey(): 
     key = os.urandom(32)
@@ -50,20 +52,4 @@ def CreatePublicPrivate():
 
     # Step 5: Return as list so other modules can consume it
     return [public_pem, private_pem]
-    
-    def CreateAESKey():
-    """
-    Generates a random AES key and IV, then returns a Cipher object.
-    Used for symmetric message encryption.
-    """
-    key = os.urandom(32)   # 256-bit AES key
-    iv = os.urandom(16)    # AES block size
-    cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
-    return cipher
 """
-
-# === Local test (do not run in production) ===
-# if __name__ == "__main__":
-#     pub, priv = CreatePublicPrivate()
-#     print(pub[:50])
-#     print(priv[:50])
