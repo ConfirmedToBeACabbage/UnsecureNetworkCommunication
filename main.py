@@ -1,4 +1,4 @@
-import requests, threading
+import requests, threading, time
 from httpserver import beginserver
 from key_creation import CreateAESKey, PerformHKDF, CreatePublicPrivate
 from mssg_encryption import EncryptMSSG, DecryptMSG
@@ -40,6 +40,7 @@ def handshake():
     url = "http://localhost:8000/ping"
     
     # First we ping the fastapi
+    print("[CLIENT] REQUESTING SERVER FOR HANDSHAKE BEGIN")
     response = requests.get(url)
 
     # We receive the public key 
@@ -100,5 +101,8 @@ if __name__ == "__main__":
     e = threading.Event()
     t1 = threading.Thread(target=beginserver, args=(e,))
     t1.start()
-    
+
+    # Let the server start
+    time.sleep(5)
+
     demonstration()

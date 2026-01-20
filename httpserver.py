@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request 
-import uvicorn, threading
+import uvicorn, logging
 from key_creation import PerformHKDF, CreatePublicPrivate
 from mssg_encryption import EncryptMSSG, DecryptMSG
 
@@ -9,6 +9,9 @@ private_key = ''
 public_key = ''
 session_key = ''
 
+logging.basicConfig(level=logging.INFO)  # Set the logging level
+logger = logging.getLogger(__name__)  # Create a logger
+
 # Using fast api as a quick http server with routes. This will be the receiving server.
 @app.get("/ping")
 async def pingandpublic(req: Request): # Should private the public key back to the user
@@ -17,13 +20,14 @@ async def pingandpublic(req: Request): # Should private the public key back to t
     pubk, privk, parameters = CreatePublicPrivate({})
     public_key = pubk # This is the public key we're serving
     private_key = privk 
-
+    logger.info("[SERVER] Public Key: " + public_key + " | Private Key: " + private_key + " | Parameters: " + parameters)
+    
     # this is incase we have a session key, aka the second handshake
     if session_key != '': 
         pubk = EncryptMSSG(session_key, pubk)
         parameters = EncryptMSSG(session_key, parameters)
 
-    return {"pubk": pubk, "parameters": parameters}
+    return {"pubk": str(pubk), "parameters": str(parameters)}
 
 @app.post("/public")
 async def receivepublic(req: Request):
