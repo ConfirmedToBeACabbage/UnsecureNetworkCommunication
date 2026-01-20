@@ -60,7 +60,7 @@ async def handshake():
 
     # Storing the private key
     private_key = privk
-    printtofile("[CLIENT] Private Key: " + private_key.decode('utf-8'))
+    printtofile("[CLIENT] Private Key Saved!")
 
     # Send back the server the public key
     url = "http://localhost:8000/public"
@@ -69,10 +69,10 @@ async def handshake():
         pubk = EncryptMSSG(session_key, pubk)
 
     # Sending a post request with the public keyy
-    response = requests.post(url, json={"pubk": pubk})
+    response = requests.post(url, json={"pubk": pubk.decode('utf-8')})
 
     # Now that we've sent the post, we can generate on our end the session key
-    session_key = PerformHKDF()
+    session_key = PerformHKDF(private_key, public_key)
 
 async def demonstration():
     global private_key, public_key, session_key, parameters

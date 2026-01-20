@@ -29,7 +29,6 @@ async def pingandpublic(req: Request): # Should private the public key back to t
     # this is incase we have a session key, aka the second handshake
     if session_key != '': 
         pubk = EncryptMSSG(session_key, pubk)
-        parameters = EncryptMSSG(session_key, parameters)
 
     return {"pubk": pubk.decode('utf-8')}
 
@@ -44,7 +43,7 @@ async def receivepublic(req: Request):
     public_key = loadpubk(body.get("pubk"))
 
     # Now that we have the public key we can perform the HKDF for a session key
-    session_key = PerformHKDF()
+    session_key = PerformHKDF(private_key, public_key)
 
     # Returning with a success!
     return {"message": "Success!"}
