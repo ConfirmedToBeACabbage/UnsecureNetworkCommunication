@@ -29,8 +29,9 @@ async def pingandpublic(req: Request): # Should private the public key back to t
     # this is incase we have a session key, aka the second handshake
     if session_key != '': 
         pubk = EncryptMSSG(session_key, pubk)
-
-    return {"pubk": pubk.decode('utf-8')}
+        return {"pubk": pubk}
+    else: 
+        return {"pubk": pubk.decode('utf-8')}
 
 @app.post("/public")
 async def receivepublic(req: Request):
