@@ -1,16 +1,38 @@
 import os 
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.asymmetric import dh
+from cryptography.hazmat.primitives.kdf.hkdf import HKDF
+
+# Not using ED25519 because it's only for validating the signature of the message
+#from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
 
 def CreateAESKey(): 
     key = os.urandom(32)
     iv = os.urandom(32)
-    cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
-    return cipher 
+    return key 
 
-def CreatePublicPrivate(): 
-    print("test")
+def PerformHKDF(private_key, public_key): 
+    shared_key = private_key.exchange(peer_public_key)
+    derived_key = HKDF(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=None,
+        info=b'handshake data',
+    ).derive(shared_key)
+
+def CreatePublicPrivate(parameters_pass):
+    parameters = dh.generate_parameters(generator=2, key_size=2048)
+    
+    if parameters != NULL: 
+        parameters = parameters_pass
+
+    private_key = parameters.generate_private_key()
+    peer_public_key = parameters.generate_private_key().public_key()
+    return private_key, public_key, parameters
+
+
 """
 # ===============================
 # KEY CREATION MODULE
