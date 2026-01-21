@@ -8,19 +8,42 @@ A message script written in Python for unsecure methods. Contains 3 modules:
 
 # Flow
 
-This project uses both public key encryption with AES symmetric encryption to achieve a safe end to end communication with another user. 
+This is following the lab description + constraints that are put forward. The file structure of the
+project is exactly how the lab is, however we’re confident that it will work well together in the end
+when everything is explained.
 
-Fundementally we have this situation: 
+The concept is simple:
+  1. We have a client
+  2. We have a server
+  3. The client wants to talk to the server
 
-[User 1] Wants to send a message securely to [User 2] 
+What we need to do is use asymmetric encryption to have a secure session. AKA public private
+keys. From there we need something more symmetric for the information itself. The very simple
+flow of the communication is:
 
-- [User 1] initiates a hello with [User 2]
-- [User 2] sends [User 1] a public key while storing securely it's own private key
-- [User 1] will use the public key to encrypt the symmetric key it's using to cipher its data
-- [User 1] sends the encrypted data and key to [User 2]
-- [User 2] decrypts this information using the private key
+1. Client pings the server (Sort of like “Hello! I want to speak to you”)
+- This is unsecure and where a well rooted man in the middle still renders all this useless to a degree
+- This is with a caveat, since modern systems also incorporate ED25519 asymmetric encryption. This actually validates the messages being sent, so this can “beat” man in the middle.
+- Certificate authorities which can mitigate poor man in the middle implementations which try to act like an authority
 
-All of this will be done over a simple HTTP server in an effort to simulate an unsecure network.   
+2. Server gets the message and responds to the user with a public key
+- Server stores private key
+3. Client receives the public key, derives the parameters that were used to make it
+- Client creates a private key based on derived parameters
+- This ensures that both client and server agree with each other
+- Client creates a public key based on derived parameters
+- This again ensures that both client and server agree with each other
+4. Client sends the public key it created back to the server, while using HKDF with the public key from the server to make a session_key
+5. The server receives the public key and on its end replicates the step of making a session_key
+
+This is a single handshake. The session_key that they both derive is mathematically linked. So
+it will work in encrypting the session and decrypting it
+
+# Running Or Seeing Output
+
+You can run this from a text editor like Visual Studio with the python extension. Put debuggers in place to see how everything executes. 
+
+Or look through the output.txt file which outputs the communication that happens between the client and server. 
 
 # Resources 
 
