@@ -3,7 +3,7 @@ from key_creation import PerformHKDF, CreatePublicPrivate
 from mssg_encryption import EncryptMSSG, DecryptMSG
 from encodedecode import pubktopem, loadpubk
 from logtofile import printtofile
-import uvicorn, time # type: ignore
+import uvicorn, time, base64 # type: ignore
 
 app = FastAPI()
 
@@ -77,8 +77,8 @@ async def receivepublic(req: Request):
     ekey = DecryptMSG(session_key, body.get("ekey"))
     emsg = DecryptMSG(session_key, body.get("emsg"))
 
-    printtofile("[SERVER] Decrypting everything past the session_key ekey: " + ekey.decode('utf-8'))
-    printtofile("[SERVER] Decrypting everything past the session_key emsg: " + emsg.decode('utf-8'))
+    printtofile("[SERVER] Decrypting everything past the session_key ekey: " + base64.b64encode(ekey).decode('utf-8'))
+    printtofile("[SERVER] Decrypting everything past the session_key emsg: " + base64.b64encode(emsg).decode('utf-8'))
 
     emsg = DecryptMSG(ekey, emsg)
 

@@ -1,27 +1,94 @@
 BEGIN
-[CLIENT] Beginning a handshake!
-[CLIENT] REQUESTING SERVER FOR HANDSHAKE BEGIN
-[SERVER] Public Key: b'-----BEGIN PUBLIC KEY-----\nMIICJTCCARcGCSqGSIb3DQEDATCCAQgCggEBAIvFOlGcK1LI045CRQoQUkaYawii\nH5T0iQWib+Nk25tfAA8hAmo6VWGKtvYXYRvEKh2HToDmMY6ziH0RgSPzSXVNKrhl\nH2BezXHjn9JAWRnOZnXCgJBie4sCBSxV5wo8/0HeSvBbKct7RDmpxZoFTE7dFx0G\n7RT4wJp1YRmQF5NGbHhL4aRjag9JDeN/rGRB+fkPgxYgCr7byknMtaGGKQs9YiJI\nJNDqbyHZM/wBavC7+2z8xqZ5v/zgrKXBgVo7p7MdO6+5CIJtReIo6JEJhyvK6Agy\ni8rdH/HFwDM+AOyExbAOrawbl59FiXakiGrvL57w3ehAjGIWatT2P0vrno8CAQID\nggEGAAKCAQEAhl1DgZ+ZEqpU/1EJqibBdiLKgsepo05zg/uz2JWdnOdHjR3VCNcN\nf/55QdiDznMzPYHexgp9/IBWRSdId7S+/GHp9/INYD0bUgQx1vgHut8patRam3Kq\nTzr00oLeqLrG/pIfQqvCa/FlLltRI8AETSkuB1aiHgcFm1yl2iyl0WVxNxshWFAp\n+l6caVfx5L49keZTaMyPWW7FBdcLCjOPghrLj8JzgL+Q6aBhoKbLvettOVVtSAHE\nk9Qel4cc+d0VUDKAXupmB1/QwjJpmZtqZ0mZ7VyUDdto/yIJEJYRryk6KVf/HyGh\nVgXPWfT6iDg9lQqiu4rKOnayfLxL8aRBUg==\n-----END PUBLIC KEY-----\n'
+[CLIENT] I want to start my first handshake with the server!
+[SERVER] I received a hello from the client!
+[SERVER] I will make a public and private key!
+[SERVER] I've made them and saved the private key
+[SERVER] Public Key: -----BEGIN PUBLIC KEY-----
+MIICJTCCARcGCSqGSIb3DQEDATCCAQgCggEBAOIx95Pj5DeIvwiRpAl6RW4+Jkf5
+F7RhzYpL6fwQpK4tEha+bDCRzMZHnkMRo8YfMPfbvhazbM6WZBnb4dtE9NV+Z0ra
+UF4cqH8aRnO+K80Q9hzuGSq6QR9ZGV2pRM5DFGOP0Ag2i57hNK+F9x7XnHNcumu4
+76xPWYe9NFKwObaLYj5uVPowL2d/6kZ/2fkbly4y+7285ezVNK/iiUpJkrExIBGf
+hXQsm75YUXM/bqSi0LmO/aC09hqBmGX4oM6le7GyCbZPczkM+VAv1vXYS63LS0yN
++Hu+fRMHW8V0xNYIvz2vY50i96Ji594jsbwRumFk9VMXS/nQSQ+vKWDKMTcCAQID
+ggEGAAKCAQEAvmiOTpUgH31CZc5x6SJp2k0n3zHQTBbvzpLi3njJA8Wvc9mrQ3MP
+3cMnQiurQA08nOm/ihgAZzwXicMpxDaHin3IpV/p5KVxOID06ZoSe1lNjilLw1sL
++DiczvGftAQ6/4Tt8vKDeBy0m3OyT4PPm/V+3Unosm15LrFsXAeail8HFMl/nG1h
+oggtkuFj247acmyZguersX1rSTvt6h3B+yA7hJvknvFEER37VuYwx2wyJ/X1bRr8
+ja9F3PQJnymEFM7xif4oZJZE41kfoQzbnOOPQG5SjAnZgIuGSHpfwwFEbuf7iwWr
+QBZmzzYet+v33HYmjcwIDf+b1h/A+zQoHA==
+-----END PUBLIC KEY-----
+
+[SERVER] Sending back the user this [public key]: -----BEGIN PUBLIC KEY-----
+MIICJTCCARcGCSqGSIb3DQEDATCCAQgCggEBAOIx95Pj5DeIvwiRpAl6RW4+Jkf5
+F7RhzYpL6fwQpK4tEha+bDCRzMZHnkMRo8YfMPfbvhazbM6WZBnb4dtE9NV+Z0ra
+UF4cqH8aRnO+K80Q9hzuGSq6QR9ZGV2pRM5DFGOP0Ag2i57hNK+F9x7XnHNcumu4
+76xPWYe9NFKwObaLYj5uVPowL2d/6kZ/2fkbly4y+7285ezVNK/iiUpJkrExIBGf
+hXQsm75YUXM/bqSi0LmO/aC09hqBmGX4oM6le7GyCbZPczkM+VAv1vXYS63LS0yN
++Hu+fRMHW8V0xNYIvz2vY50i96Ji594jsbwRumFk9VMXS/nQSQ+vKWDKMTcCAQID
+ggEGAAKCAQEAvmiOTpUgH31CZc5x6SJp2k0n3zHQTBbvzpLi3njJA8Wvc9mrQ3MP
+3cMnQiurQA08nOm/ihgAZzwXicMpxDaHin3IpV/p5KVxOID06ZoSe1lNjilLw1sL
++DiczvGftAQ6/4Tt8vKDeBy0m3OyT4PPm/V+3Unosm15LrFsXAeail8HFMl/nG1h
+oggtkuFj247acmyZguersX1rSTvt6h3B+yA7hJvknvFEER37VuYwx2wyJ/X1bRr8
+ja9F3PQJnymEFM7xif4oZJZE41kfoQzbnOOPQG5SjAnZgIuGSHpfwwFEbuf7iwWr
+QBZmzzYet+v33HYmjcwIDf+b1h/A+zQoHA==
+-----END PUBLIC KEY-----
+
 [CLIENT] Public Key: -----BEGIN PUBLIC KEY-----
-MIICJTCCARcGCSqGSIb3DQEDATCCAQgCggEBAIvFOlGcK1LI045CRQoQUkaYawii
-H5T0iQWib+Nk25tfAA8hAmo6VWGKtvYXYRvEKh2HToDmMY6ziH0RgSPzSXVNKrhl
-H2BezXHjn9JAWRnOZnXCgJBie4sCBSxV5wo8/0HeSvBbKct7RDmpxZoFTE7dFx0G
-7RT4wJp1YRmQF5NGbHhL4aRjag9JDeN/rGRB+fkPgxYgCr7byknMtaGGKQs9YiJI
-JNDqbyHZM/wBavC7+2z8xqZ5v/zgrKXBgVo7p7MdO6+5CIJtReIo6JEJhyvK6Agy
-i8rdH/HFwDM+AOyExbAOrawbl59FiXakiGrvL57w3ehAjGIWatT2P0vrno8CAQID
-ggEGAAKCAQEAhl1DgZ+ZEqpU/1EJqibBdiLKgsepo05zg/uz2JWdnOdHjR3VCNcN
-f/55QdiDznMzPYHexgp9/IBWRSdId7S+/GHp9/INYD0bUgQx1vgHut8patRam3Kq
-Tzr00oLeqLrG/pIfQqvCa/FlLltRI8AETSkuB1aiHgcFm1yl2iyl0WVxNxshWFAp
-+l6caVfx5L49keZTaMyPWW7FBdcLCjOPghrLj8JzgL+Q6aBhoKbLvettOVVtSAHE
-k9Qel4cc+d0VUDKAXupmB1/QwjJpmZtqZ0mZ7VyUDdto/yIJEJYRryk6KVf/HyGh
-VgXPWfT6iDg9lQqiu4rKOnayfLxL8aRBUg==
+MIICJTCCARcGCSqGSIb3DQEDATCCAQgCggEBAOIx95Pj5DeIvwiRpAl6RW4+Jkf5
+F7RhzYpL6fwQpK4tEha+bDCRzMZHnkMRo8YfMPfbvhazbM6WZBnb4dtE9NV+Z0ra
+UF4cqH8aRnO+K80Q9hzuGSq6QR9ZGV2pRM5DFGOP0Ag2i57hNK+F9x7XnHNcumu4
+76xPWYe9NFKwObaLYj5uVPowL2d/6kZ/2fkbly4y+7285ezVNK/iiUpJkrExIBGf
+hXQsm75YUXM/bqSi0LmO/aC09hqBmGX4oM6le7GyCbZPczkM+VAv1vXYS63LS0yN
++Hu+fRMHW8V0xNYIvz2vY50i96Ji594jsbwRumFk9VMXS/nQSQ+vKWDKMTcCAQID
+ggEGAAKCAQEAvmiOTpUgH31CZc5x6SJp2k0n3zHQTBbvzpLi3njJA8Wvc9mrQ3MP
+3cMnQiurQA08nOm/ihgAZzwXicMpxDaHin3IpV/p5KVxOID06ZoSe1lNjilLw1sL
++DiczvGftAQ6/4Tt8vKDeBy0m3OyT4PPm/V+3Unosm15LrFsXAeail8HFMl/nG1h
+oggtkuFj247acmyZguersX1rSTvt6h3B+yA7hJvknvFEER37VuYwx2wyJ/X1bRr8
+ja9F3PQJnymEFM7xif4oZJZE41kfoQzbnOOPQG5SjAnZgIuGSHpfwwFEbuf7iwWr
+QBZmzzYet+v33HYmjcwIDf+b1h/A+zQoHA==
 -----END PUBLIC KEY-----
 
 [CLIENT] Private Key Saved!
-[CLIENT] Doing DH twice for forward secrecy
-[CLIENT] REQUESTING SERVER FOR HANDSHAKE BEGIN
-[SERVER] Public Key: b'-----BEGIN PUBLIC KEY-----\nMIICJDCCARcGCSqGSIb3DQEDATCCAQgCggEBAIRhLlTtgvAzzWrZEC4jy7lF8AeC\nqmpLMebxowrTHlm8hHe+8oFz/Q0vO2opwcElhzHpCRd2R3da85BOKV+aXr+Jzcqd\nbfmsPtXOm00Kc+uyB4KBnKNGXLqqmjfULiOuQd6JMefn3lMYr348SewLcYImE5A2\nsNY02rmTtyKoZQbQykwBBeqElacOTbZePoTJfF1v5OZMJgqlzvjE6ZQtrWrg3M37\nTvRfhkI7OFGqJCA95bdlfRZADA7aEMlZjdx93lbutm4yNGI9WVCC71a+CuVFgFCz\nRMZP6HNBft4zLm4YO4niRcmIwarsaiAP3hEZ1WDG+Ze0Bt0YP38p0cZFh78CAQID\nggEFAAKCAQAaQ96Oxyhf9qX0AOl9OVoaE0BlYumpEGD6MrEZgMrP4m0WJpsGtQZG\neWXyaHCjWxpmTTJvVxJIufVi/Zf7slBTvGrsjFQEDCRd6MKINEj8GyfVwwGNJbsw\n0EUvU0BkAMRoSz0RA24fomWfNOg+Wd5YlIlWryQ3drxZHgwkeyhNDHfI9QqGvVFL\nanfDu/SqOiL0lmwlxET/DBHeTvIqE55BdlGII2kwRT4qowEuXGSE47eV0U+rKyjG\nyypCTiXuFoU5K7Ze1swOEKz/wPVhrZBZ6afovjb1VAmJAhuqupaqWzzEwG4wl+yR\nA06cMaF6OsRZoGCLpV5buzDhJKJuNGyS\n-----END PUBLIC KEY-----\n'
-[CLIENT] Public Key: 0hvjDAjQS4n7yc1H0IeR38Li7nUYyv11Xnvq8DSZ2NHOBmvCcrIzzdFOp4/jf2blxugQTMXW0YTaZgcVPKY5fc/CBiO8b9RW6agRbTi0e2G4advZUaFZV8QwIQ2d7JJfCEbpElr3VHAmcMvKOVHA82qLVeImCJ+2kFsz5h/WqtV8dtVukOJRS8lsbjUqReFXDUNVpDrIU99Z+TLJ0j10IX1Q3YkYOISPglY5PV7IuzlVwsEgPSpqfGjhB0XKEAlwjVHKdyJZBklkFwZ2mz7CkJ3BJxhkYFwV22tLWe4I5yMrvn0cOSdRpshOFj7zqePBOyaQNiioGa4jcx4ZKAx3uEevl7J8M84JQKge62OPlPoUiYQL9fPt+3T4o84gebP+gnRPO8VZe8keT0N0njwMgz5SYsP53hzsDPNr14LouvtpHo6BM/jHHOC+OEPsOHNujSVkQ7jjT2nWfrPV0zn21DWkm0nD7mQCgHCVrSKhMOUOTtE2fagZKHJ5AaEV0EeTEzu19QkLHHSZ1o7n2lgOOq8MznfR7B5+p9jpHfQzEBLH9i41fPb/Aj/Kt73TE9+xJDn6GKTDaMBtVdk5j28B8SGLag/zjGt3//A8QU3h0yfAFwPFMU0RD1mL4oXKzabCFDD1L/yvIc3IofNyDbnZhwgSLEq793Tm0zsmeFoAalOQBZo5KmMDPHUgG99A2RL+0N8LrG4YoMy9akovUDLYWUM2SYe8Hk5GuR0uZ931X+Q9iEG7vUaRAlI5Es0JEVIsVc3MI0qziUElaQCjObIjEn8uo5gPaFxC28F0ETCXbCOFNHZLWbtyVa26h/XtUQUz2N5UeJ9mLTc9NZ/anRZhX3iSjC0a8QkejmgrDkTLtWLNS7v0fiIKptpFBVW3kAUGKgAXbHSnjre6n2amxdvyrITmE0lZMzseKqTU3ycakVQjYcFGIPkzNaW7OXvuu8ZnVccHrI2oS5rkeUHQ2hJVxfTXD50n9/2CjSn9JbQfBF5KyCjV2QrJ4wAysSKU5SwGZ+5idfuPPNPhO45aRYhKZMRkqv3+L2V31SX0SnUkO9Ij0qAkK0skJsukbg7wZsYbyEpk9gd0+hnjWfnP/QCILQ==
+[SERVER] I received a public key from the client! This is still the handshake
+[SERVER] I need to decrypt (if we're using a session key) the public key and use HKDF to make a session key
+[SERVER] We don't have a session key, we can just retreive the public key
+[SERVER] Using the public key I got, I made a session_key. I assume it matches up because me and the client agree on parameters and our keys.
+[CLIENT] Doing my second handshake with the server for forward secrecy!
+[SERVER] I received a hello from the client!
+[SERVER] I will make a public and private key!
+[SERVER] I've made them and saved the private key
+[SERVER] Public Key: -----BEGIN PUBLIC KEY-----
+MIICJDCCARcGCSqGSIb3DQEDATCCAQgCggEBAL3aojoWqqhh6+9dKlnQhhAIBv6w
+0kePljaojM+5WFZHZiIFyIcdcsRW19j/3d3y9vqtYKcjTqT7DuFJG5ALW3pBZN6h
+Q3XS4CfYTUjUL0o9uyts17jIh88TWDXZG54GSrimAXEXcyYH+D/MM250BI4ljCcp
+HT85pnt2ZNVDLzaQp0Deg3Gk5VeWHbRt1DHUT38SYk/WkUJQE0IlpZUnoeOazQn/
+0D/VBLWKFw+eEDHfDCivmkqShqC+tgBE0HofQgL7Sl20kQ6b24jQub1Bm5evW8in
+q43Fr9XJTM56+rkElUSdcGZ9cEtdJZTWpPAxmmQmcCxDTosI3Hiud6jZ988CAQID
+ggEFAAKCAQB41Hzwbyh3A0Y5nVwSyt/Uvlg2D3fd4Syr0rg/Zi83l1cQcf3VSnw0
+He9FQWz0zzGl4btGDBZ5sAGxEw/Pk+EewY4FadEob71yeItR+k7mxmoSlPZG2ShC
+d6T/YVdoRGMbBJrn4KeNmlssGjkCbEYFgIdQWJGi/5eAW1uus6euq06Uiw6iNs7W
+fiHSEwMt9CmVV91+VPlk8GEIHocjua3Hp/0bIDZHLwUgRm17XBzhGL8ss0Pceyvv
+kRqBAxREFmsUopayvLZSo2BypggW+V7bF79zu5ism5f4RCPH4aUBPVs4kGReSqEI
+vgm+KLaF1feOs7gJUER1nBQJLDQ+ys6F
+-----END PUBLIC KEY-----
+
+[SERVER] I already have a session_key with this client! I will use that as a layer of protection
+[SERVER] Sending back the user this [public key]: RketmB215dkbGeyy2sHPPUklST3UxgUUFkGhmT9ULRvefM9vWrmdUyULyYgANYfucuvdZ35ZhLcn4QNKznU6h00adHfxU29P1Tzj+io+/7N0wLcDvMSA7lnHGRBuz83Kec52SVYVY1ExR68Wa3udq3mRiYSQZ9SG38yT5bV6XsArWAWoA94x9OhqofiUepzvjG7UMs7al37uPdSyVWW6Ic1JJ5jfGPM1xktmGdUC4h5wbvS/pN5n3Dsx4JOY71bYcbkLoSukK72qfjHqPHysrO5x9I1FJnokx70bZyQH9NDuiwT8ZiKDNKPXBY3rqQclVrBUcXhrX0dXdbsxCTVj1HsVYyiVfRlB6UwLL/Vt4W36SKHOPmv0ypEYwl8Faf3YRpI5twbPNQqg71lWK4ZigIhmQefAedm9tI7OQP49081/sM1sJU+A6V1EObjaggOof6fCHVUz5TJHpazuedo7mIbbbpWymvL2fJReF//Sf4qGSk+mBZ4rZ9Oc8WYBxh8nN1uQAslGYxsxjlkdSxDzgBi4VjwniD9r3Sh+40fXSDdmAnqK97ODLjWo7HhyoxMxlqgWA+iUUQhMIpGAqKVDCxcO1TafYa0oO4wTCwgzuhGU2RAMcdOxClHD5xluBGmciTUC0eF3Du3moZvM5lcVcBtZ7S0fAJgtRl8GunoT+j2KLSziB8QkxJ3Z/pz2032X6xQHWByCBhEwN+WDvdy/8FTK3uuW4VWs7XhHD77LNZZ3NV/3XuYF+WMPjpjZEm58GhK7d7tRg4BZm9i7jJkRlHEfI5tRTBmxFXqM2nn3HmKpEaxE5uQl+Yhr+C97O/VJiFe4eh6T+ktyN9t4yCE5cq+ro5+3WeVreCi1HVr3HvEqpabnRkuu1rIkdp13HUPICwQ32UFJj6QjbJS8reugh0ua78uO1ylVjLEKCHzyB13tpdSUb4xr5TsFXK0M1XJ/1+RDUb1MS4EIY16kstgY5neh3VOZqPUX1toCWz/fYnBK2La5w40yZhnyw36ng/Jtpf7C2lrDx5XDIG8SNy0dzNt2q0WrJiBxL6z/zi0Rl8m3aQ4ODxeEgArvYNjFiY6t+E1/84tAqQRyGx1koXa53g==
+[CLIENT] Public Key: RketmB215dkbGeyy2sHPPUklST3UxgUUFkGhmT9ULRvefM9vWrmdUyULyYgANYfucuvdZ35ZhLcn4QNKznU6h00adHfxU29P1Tzj+io+/7N0wLcDvMSA7lnHGRBuz83Kec52SVYVY1ExR68Wa3udq3mRiYSQZ9SG38yT5bV6XsArWAWoA94x9OhqofiUepzvjG7UMs7al37uPdSyVWW6Ic1JJ5jfGPM1xktmGdUC4h5wbvS/pN5n3Dsx4JOY71bYcbkLoSukK72qfjHqPHysrO5x9I1FJnokx70bZyQH9NDuiwT8ZiKDNKPXBY3rqQclVrBUcXhrX0dXdbsxCTVj1HsVYyiVfRlB6UwLL/Vt4W36SKHOPmv0ypEYwl8Faf3YRpI5twbPNQqg71lWK4ZigIhmQefAedm9tI7OQP49081/sM1sJU+A6V1EObjaggOof6fCHVUz5TJHpazuedo7mIbbbpWymvL2fJReF//Sf4qGSk+mBZ4rZ9Oc8WYBxh8nN1uQAslGYxsxjlkdSxDzgBi4VjwniD9r3Sh+40fXSDdmAnqK97ODLjWo7HhyoxMxlqgWA+iUUQhMIpGAqKVDCxcO1TafYa0oO4wTCwgzuhGU2RAMcdOxClHD5xluBGmciTUC0eF3Du3moZvM5lcVcBtZ7S0fAJgtRl8GunoT+j2KLSziB8QkxJ3Z/pz2032X6xQHWByCBhEwN+WDvdy/8FTK3uuW4VWs7XhHD77LNZZ3NV/3XuYF+WMPjpjZEm58GhK7d7tRg4BZm9i7jJkRlHEfI5tRTBmxFXqM2nn3HmKpEaxE5uQl+Yhr+C97O/VJiFe4eh6T+ktyN9t4yCE5cq+ro5+3WeVreCi1HVr3HvEqpabnRkuu1rIkdp13HUPICwQ32UFJj6QjbJS8reugh0ua78uO1ylVjLEKCHzyB13tpdSUb4xr5TsFXK0M1XJ/1+RDUb1MS4EIY16kstgY5neh3VOZqPUX1toCWz/fYnBK2La5w40yZhnyw36ng/Jtpf7C2lrDx5XDIG8SNy0dzNt2q0WrJiBxL6z/zi0Rl8m3aQ4ODxeEgArvYNjFiY6t+E1/84tAqQRyGx1koXa53g==
 [CLIENT] Private Key Saved!
-[CLIENT] Now that we have a second session open, we will encrypt a message using AES and send it over
-[CLIENT] FINAL MESSAGE BACK: Hello! This is a sample message I want to send :)
+[SERVER] I received a public key from the client! This is still the handshake
+[SERVER] I need to decrypt (if we're using a session key) the public key and use HKDF to make a session key
+[SERVER] We have a session key! We will first decrypt the message and then retreive the pubk
+[SERVER] Using the public key I got, I made a session_key. I assume it matches up because me and the client agree on parameters and our keys.
+[CLIENT] With forward secrecy established, we will now encrypt a message over the secure channel
+[CLIENT] Key: hi+FzEaQfeIo51kc1ITzvA==
+[CLIENT] Encrypted Key: 9n6iDZ+D56MMASkECVPktfkK8Kqi6GwMKhm/IQYFaGxQf1i3ciyiXFbyEmdSG44m6v8lBtDfsLqnTZLrh9GgoFmob4Z1oukI9ryAcP4wJcQ=
+[CLIENT] We now will encrypt everything with our session key! I would output it, but the format of HKDF doens't support utf-8 conversions
+[CLIENT] Encrypted key (with session key): gbsLZFtbC9pVpq+hW4NZ2dX+83b78d0abP3HG4OSaH7Iim8N75rqR0uGabqnWBTj
+[CLIENT] Encrypted message (with session key): C4tiQTe+QNGDKFutqYw8Dcf8zKWuwaw7Kzd3hbIS6vraHZopV6FQuYYlrwTt7hOV5YYkIRorsk/qC7lXknC6NdmSPJN7uifQs7IYGlNfj3V5WKqMwATG409sta+LBFmXyfZZOeelw6VycAqQgIzgcOfmf0CjaJjNLd6kTIMcZ9Y=
+[CLIENT] Sending this over to the server!
+[SERVER] I received the msg route! This means, our channel is secure and I need to decrypt + decrypt the message with the symmetric key
+[SERVER] Decrypting everything past the session_key ekey: hi+FzEaQfeIo51kc1ITzvA==
+[SERVER] Decrypting everything past the session_key emsg: OW42aURaK0Q1Nk1NQVNrRUNWUGt0ZmtLOEtxaTZHd01LaG0vSVFZRmFHeFFmMWkzY2l5aVhGYnlFbWRTRzQ0bTZ2OGxCdERmc0xxblRaTHJoOUdnb0Ztb2I0WjFvdWtJOXJ5QWNQNHdKY1E9
+[SERVER] Finally we can decrypt the message! msg: Hello! This is a sample message I want to send :)
+[CLIENT] Final Message back! Hello! This is a sample message I want to send :)

@@ -1,4 +1,4 @@
-import requests, threading, time, asyncio
+import requests, threading, time, asyncio, base64
 from httpserver import beginserver
 from key_creation import CreateAESKey, PerformHKDF, CreatePublicPrivate
 from mssg_encryption import EncryptMSSG, DecryptMSG
@@ -95,12 +95,12 @@ async def demonstration():
     # Create a cipher and a key
     key = CreateAESKey()
 
-    printtofile("[CLIENT] Key: " + key.decode('utf-8'))
+    printtofile("[CLIENT] Key: " + base64.b64encode(key).decode('utf-8'))
     
     # Encrypt using the aes key we came up with
     emsg = EncryptMSSG(key, mssg)
 
-    printtofile("[CLIENT] Encrypted Key: " + emsg.deocde('utf-8'))
+    printtofile("[CLIENT] Encrypted Key: " + emsg.decode('utf-8'))
     printtofile("[CLIENT] We now will encrypt everything with our session key! I would output it, but the format of HKDF doens't support utf-8 conversions")
     
     # We now encrypt it with the session_key on top of all of that
