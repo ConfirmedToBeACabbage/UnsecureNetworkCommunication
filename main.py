@@ -33,17 +33,11 @@ Man in the middle can hurt this process. However this is where certificate autho
 (5) Decrypt on the server and present it as proof! 
 """ 
 
-parameters = {}
-private_key = ''
-public_key = ''
-session_key = ''
-
 async def handshake(): 
     global private_key, public_key, session_key, parameters
     url = "http://localhost:8000/ping"
     
     # First we ping the fastapi
-    printtofile("[CLIENT] REQUESTING SERVER FOR HANDSHAKE BEGIN")
     response = requests.get(url)
 
     # We receive the public key 
@@ -79,17 +73,18 @@ async def handshake():
     session_key = PerformHKDF(private_key, public_key)
 
 async def demonstration():
-    global private_key, public_key, session_key, parameters
-    printtofile("[CLIENT] Beginning a handshake!")
+    global private_key, public_key, session_key, parameters, e
+
+    printtofile("[CLIENT] I want to start my first handshake with the server!")
     # Do one handshake
     await handshake()
 
-    printtofile("[CLIENT] Doing DH twice for forward secrecy")
+    printtofile("[CLIENT] Doing my second handshake with the server for forward secrecy!")
     # However now that we've done this once 
     # For forward secrecy we do it again with the session key
     await handshake()
     
-    printtofile("[CLIENT] Now that we have a second session open, we will encrypt a message using AES and send it over")
+    printtofile("[CLIENT] With forward secrecy established, we will now encrypt a message over the secure channel")
 
     # Session keys when are made with HKDF can't simply just be translated
     # to HKDF. They don't have the right start byte which tells us the length of the characters
@@ -99,23 +94,38 @@ async def demonstration():
 
     # Create a cipher and a key
     key = CreateAESKey()
+
+    printtofile("[CLIENT] Key: " + key.decode('utf-8'))
     
     # Encrypt using the aes key we came up with
     emsg = EncryptMSSG(key, mssg)
 
+    printtofile("[CLIENT] Encrypted Key: " + emsg.deocde('utf-8'))
+    printtofile("[CLIENT] We now will encrypt everything with our session key! I would output it, but the format of HKDF doens't support utf-8 conversions")
+    
     # We now encrypt it with the session_key on top of all of that
     ekey = EncryptMSSG(session_key, key) 
     emsg = EncryptMSSG(session_key, emsg)
+
+    printtofile("[CLIENT] Encrypted key (with session key): " + ekey.decode('utf-8'))
+    printtofile("[CLIENT] Encrypted message (with session key): " + emsg.decode('utf-8'))
+    printtofile("[CLIENT] Sending this over to the server!")
 
     # Send this information over
     url = "http://localhost:8000/msg"
     response = requests.post(url, json={"ekey": ekey.decode('utf-8'), "emsg": emsg.decode('utf-8')})
 
     convert = response.json()
-    printtofile("[CLIENT] FINAL MESSAGE BACK: " + convert['message'])
+    printtofile("[CLIENT] Final Message back! " + convert['message'])
 
     # End the server
     e.set()
+
+parameters = {}
+private_key = ''
+public_key = ''
+session_key = ''
+e = threading.Event()
 
 if __name__ == "__main__":
 
@@ -123,7 +133,6 @@ if __name__ == "__main__":
     initfilesend()
 
     # We should start the server on a seperate thread
-    e = threading.Event()
     t1 = threading.Thread(target=beginserver, args=(e,))
     t1.start()
 
