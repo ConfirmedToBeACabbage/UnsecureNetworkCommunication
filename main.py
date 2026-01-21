@@ -49,7 +49,7 @@ async def handshake():
     # We receive the public key 
     convert = response.json()
     if session_key != '': 
-        public_key = loadpubk(DecryptMSG(convert["pubk"])) # We are storing the public key 
+        public_key = loadpubk(DecryptMSG(session_key, convert["pubk"])) # We are storing the public key 
     else: 
         public_key = loadpubk(convert["pubk"]) # We are storing the public key 
         

@@ -17,14 +17,27 @@ def EncryptMSSG(key, msg):
     # We need to properly return this
     iv_ct = iv + ct 
     
-    return base64.b64encode(iv_ct)
+    return base64.b64encode(iv_ct) #Encoded in base64
 
+# There are some assumptions made here about this DecryptMSG
+# We are receiving utf-8 decoded information
+# So we should 
+# 1) Decode the base64 information
+# 2) Gather the iv that we assume is with 16 byte block padding
+# 3) Get the rest of the ct message afterwards
 def DecryptMSG(key, msg): 
-    unpadder = padding.PKCS7(128).unpadder()
-    data = unpadder.update(msg)
-    data += unpadder.finalize()
-    iv = os.urandom(16)
+    iv_ct = base64.b64decode(msg)
+
+    iv = iv_ct[:16] 
+    ct = iv_ct[16:]
+
     cipher = Cipher(algorithms.AES(key), modes.CBC(iv))
     decryptor = cipher.decryptor()
-    ct = decryptor.update(data) + decryptor.finalize()
-    return ct 
+
+    decrypted_data = decryptor.update(ct) + decryptor.finalize()
+
+    # We should also make sure we remove the padding
+    unpadding = padding.PKCS7(128).unpadder()
+    final_data = unpadding.update(decrypted_data) + unpadding.finalize()
+
+    return final_data 

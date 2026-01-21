@@ -30,7 +30,9 @@ def pubktopem(publickey):
     return publickey.public_bytes(encoding = Encoding.PEM, format = PublicFormat.SubjectPublicKeyInfo)
 
 def loadpubk(pempublickey):
-    pempublickey = pempublickey.encode('utf-8')
+    if isinstance(pempublickey, str): 
+        pempublickey = pempublickey.encode('utf-8')
+
     return load_pem_public_key(pempublickey)
     
 # Encoding and decoding the aes key
