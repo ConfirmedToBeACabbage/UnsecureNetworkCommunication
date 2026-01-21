@@ -41,7 +41,7 @@ it will work in encrypting the session and decrypting it
 
 # Running Or Seeing Output
 
-You can run this from a text editor like Visual Studio with the python extension. Put debuggers in place to see how everything executes. 
+You can run this from a text editor like Visual Studio with the python extension. Put breakpoints in place to see how everything executes. 
 
 Or look through the output.txt file which outputs the communication that happens between the client and server. 
 
