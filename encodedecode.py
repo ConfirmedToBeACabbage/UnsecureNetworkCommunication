@@ -34,10 +34,3 @@ def loadpubk(pempublickey):
         pempublickey = pempublickey.encode('utf-8')
 
     return load_pem_public_key(pempublickey)
-    
-# Encoding and decoding the aes key
-def encodeaesk(aeskey):
-    return aeskey.hex()
-
-def decodeaesk(aeskeyhex):
-    return bytes.fromhex(aeskeyhex)

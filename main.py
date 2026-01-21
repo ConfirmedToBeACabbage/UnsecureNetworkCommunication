@@ -2,7 +2,7 @@ import requests, threading, time, asyncio
 from httpserver import beginserver
 from key_creation import CreateAESKey, PerformHKDF, CreatePublicPrivate
 from mssg_encryption import EncryptMSSG, DecryptMSG
-from encodedecode import encodeaesk, pubktopem, loadpubk
+from encodedecode import pubktopem, loadpubk
 from logtofile import initfilesend, printtofile
 # This is going to be the source file where we combine all packages to get a simple transaction working 
 
@@ -90,28 +90,29 @@ async def demonstration():
     await handshake()
     
     printtofile("[CLIENT] Now that we have a second session open, we will encrypt a message using AES and send it over")
-    # Ensuring session_key is in bytes form
-    session_key = session_key.encode('utf-8')
 
-    printtofile("[CLIENT] Session Key: " + str(session_key))
+    # Session keys when are made with HKDF can't simply just be translated
+    # to HKDF. They don't have the right start byte which tells us the length of the characters
+
     # Now that we have forward secrecy and everything established, we can do the cipher send
-    mssg = b"Hello!"
+    mssg = b"Hello! This is a sample message I want to send :)"
 
     # Create a cipher and a key
     key = CreateAESKey()
     
-    # Encrypt using the cipher
+    # Encrypt using the aes key we came up with
     emsg = EncryptMSSG(key, mssg)
 
-    # We now encrypt it with the session key y
-    ekey = EncryptMSSG(session_key, key)
+    # We now encrypt it with the session_key on top of all of that
+    ekey = EncryptMSSG(session_key, key) 
     emsg = EncryptMSSG(session_key, emsg)
-    
-    ekey = encodeaesk(key)
 
     # Send this information over
     url = "http://localhost:8000/msg"
-    response = requests.post(url, json={"ekey": ekey, "emsg": emsg})
+    response = requests.post(url, json={"ekey": ekey.decode('utf-8'), "emsg": emsg.decode('utf-8')})
+
+    convert = response.json()
+    printtofile("[CLIENT] FINAL MESSAGE BACK: " + convert['message'])
 
     # End the server
     e.set()
