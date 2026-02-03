@@ -44,7 +44,7 @@ async def handshake(manager: KeyManager, root_capability: Capability, demonstrat
     # We receive the public key 
     convert = response.json()
     if demonstration_step >= 1: 
-        public_key = loadpubk(DecryptMSG(manager.get_active_dek(manager.load_keyring("supersecretpassword", root_capability), root_capability), convert["pubk"])) # We are storing the public key 
+        public_key = loadpubk(DecryptMSG(manager.get_active_dek(manager.load_keyring("supersecretpassword", root_capability), root_capability)[1], convert["pubk"])) # We are storing the public key 
     else: 
         public_key = loadpubk(convert["pubk"]) # We are storing the public key 
         
@@ -72,20 +72,17 @@ async def handshake(manager: KeyManager, root_capability: Capability, demonstrat
         manager.init_keyring_with_header("supersecretpassword", PerformHKDF(private_key, public_key), root_capability, "client_key_1") # Here we are storing a session key
     except FileExistsError as e: # However if the file already exists, that means we simply need to rotate them
         printtofile("[CLIENT] Keyring already exists. Continuing...")
-        
-        # Demonstrate that rotation will not let us read the old information
-        printtofile("[CLIENT] Rotating keys for forward secrecy demonstration.")
-        printtofile("[CLIENT] Getting the old key ring to show that we won't be able to extract the dek after rotation.")
-        old_keyring = manager.load_keyring("supersecretpassword", root_capability)
 
         manager.rotate_key(manager.load_keyring("supersecretpassword", root_capability), root_capability, PerformHKDF(private_key, public_key), "client_key_2")
         
         printtofile("[CLIENT] Attempting to get the old DEK after rotation, it won't be able to")
-        manager.get_active_dek(old_keyring, root_capability) 
+        attempt = manager.get_active_dek(manager.load_keyring("supersecretpassword", root_capability), root_capability)
+
+        manager.destroy_key("supersecretpassword", root_capability, "client_key_1")
 
     # Sending a post request with the public keyy
     if(demonstration_step >= 1): 
-        pubk = EncryptMSSG(manager.get_active_dek(manager.load_keyring("supersecretpassword", root_capability), root_capability), pubk)
+        pubk = EncryptMSSG(manager.get_active_dek(manager.load_keyring("supersecretpassword", root_capability), root_capability)[1], pubk)
 
     response = requests.post(url, json={"pubk": pubk.decode('utf-8')})
 

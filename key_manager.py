@@ -269,18 +269,23 @@ class KeyManager:
             "retired_at": None,
         }
         ring["active_key_id"] = new_id
+
+        self.save_keyring(ring)
         return new_id
 
     # ---------------------------
     # Key destruction
     # ---------------------------
-    def destroy_key(self, ring: Dict[str, Any], cap: Capability, key_id: str) -> None:
+    def destroy_key(self, password: str, cap: Capability, key_id: str) -> None:
+        load_ring = self.load_keyring(password, cap)
         self._require_auth(cap, key_id, "destroy_key")
 
-        if key_id == ring["active_key_id"]:
+        if key_id == load_ring["active_key_id"]:
             raise ValueError("refuse to destroy active key (rotate first)")
 
-        if key_id not in ring["keys"]:
+        if key_id not in load_ring["keys"]:
             raise KeyError(f"key not found: {key_id}")
 
-        del ring["keys"][key_id]
+        del load_ring["keys"][key_id]
+
+        self.save_keyring(load_ring)

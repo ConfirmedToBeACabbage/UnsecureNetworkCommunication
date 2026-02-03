@@ -1,1 +1,15 @@
-2026-02-02 19:50:53 key_id=k1770090647 op=key_creation result=ALLOW reason=authorized
+2026-02-02 20:22:15 key_id=client_key_1 op=key_creation result=ALLOW reason=authorized
+2026-02-02 20:22:53 key_id=N/A op=keyring_load result=ALLOW reason=authorized
+2026-02-02 20:22:53 key_id=client_key_1 op=get_active_key result=ALLOW reason=authorized
+2026-02-02 20:23:35 key_id=N/A op=keyring_load result=ALLOW reason=authorized
+2026-02-02 20:23:35 key_id=client_key_1 op=rotate_key result=ALLOW reason=authorized
+2026-02-02 20:23:41 key_id=N/A op=keyring_load result=ALLOW reason=authorized
+2026-02-02 20:23:41 key_id=client_key_2 op=get_active_key result=ALLOW reason=authorized
+2026-02-02 20:26:11 key_id=client_key_1 op=destroy_key result=ALLOW reason=authorized
+2026-02-02 20:31:12 key_id=N/A op=keyring_load result=ALLOW reason=authorized
+2026-02-02 20:31:12 key_id=client_key_2 op=rotate_key result=ALLOW reason=authorized
+2026-02-02 20:31:12 key_id=N/A op=keyring_load result=ALLOW reason=authorized
+2026-02-02 20:31:12 key_id=client_key_2 op=get_active_key result=ALLOW reason=authorized
+2026-02-02 20:31:24 key_id=N/A op=keyring_load result=ALLOW reason=authorized
+2026-02-02 20:31:35 key_id=client_key_1 op=destroy_key result=ALLOW reason=authorized
+2026-02-02 20:32:32 key_id=N/A op=keyring_load result=ALLOW reason=authorized
