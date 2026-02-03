@@ -4,6 +4,7 @@ from key_creation import CreateAESKey, PerformHKDF, CreatePublicPrivate
 from mssg_encryption import EncryptMSSG, DecryptMSG
 from encodedecode import pubktopem, loadpubk
 from logtofile import initfilesend, printtofile
+from key_manager import Capability, KeyManager 
 # This is going to be the source file where we combine all packages to get a simple transaction working 
 
 """
@@ -33,8 +34,8 @@ Man in the middle can hurt this process. However this is where certificate autho
 (5) Decrypt on the server and present it as proof! 
 """ 
 
-async def handshake(): 
-    global private_key, public_key, session_key, parameters
+async def handshake(manager: KeyManager, root_capability: Capability): 
+    global private_key, public_key, parameters
     url = "http://localhost:8000/ping"
     
     # First we ping the fastapi
@@ -70,9 +71,16 @@ async def handshake():
     response = requests.post(url, json={"pubk": pubk.decode('utf-8')})
 
     # Now that we've sent the post, we can generate on our end the session key
-    session_key = PerformHKDF(private_key, public_key)
+    #session_key = PerformHKDF(private_key, public_key)
+    # So now instead of us just making the session key, we use the key manager to make a ring, store it and then retrieve it later.
+    try: 
+        manager.init_keyring_with_header("supersecretpassword", PerformHKDF(private_key, public_key), root_capability) # Here we are storing a session key
+    except FileExistsError as e: # However if the file already exists, that means we simply need to rotate them
+        printtofile("[CLIENT] Keyring already exists. Continuing...")
+    finally: # This is what happens if the file exists, we simply rotate the keys
+        manager.rotate_key(manager.load_keyring("supersecretpassword", root_capability), root_capability, PerformHKDF(private_key, public_key))
 
-async def demonstration():
+async def demonstration(manager: KeyManager, root_capability: Capability):
     global private_key, public_key, session_key, parameters, e
 
     printtofile("[CLIENT] I want to start my first handshake with the server!")
@@ -102,10 +110,12 @@ async def demonstration():
 
     printtofile("[CLIENT] Encrypted Key: " + emsg.decode('utf-8'))
     printtofile("[CLIENT] We now will encrypt everything with our session key! I would output it, but the format of HKDF doens't support utf-8 conversions")
-    
+
     # We now encrypt it with the session_key on top of all of that
-    ekey = EncryptMSSG(session_key, key) 
-    emsg = EncryptMSSG(session_key, emsg)
+    #ekey = EncryptMSSG(session_key, key) 
+    #emsg = EncryptMSSG(session_key, emsg)
+    ekey = EncryptMSSG(manager.get_active_dek(manager.load_keyring("supersecretpassword", root_capability), root_capability), key)
+    emsg = EncryptMSSG(manager.get_active_dek(manager.load_keyring("supersecretpassword", root_capability), root_capability), emsg)
 
     printtofile("[CLIENT] Encrypted key (with session key): " + ekey.decode('utf-8'))
     printtofile("[CLIENT] Encrypted message (with session key): " + emsg.decode('utf-8'))
@@ -128,6 +138,11 @@ session_key = ''
 e = threading.Event()
 
 if __name__ == "__main__":
+
+    # We should initiate the Keymanager with Capabilities Role + Master Key 
+    #derive_master_key(b"SuperSecretPassword", b"UniqueSaltValue") <-- This is what we will pass in when we want to derive the master key, not stored on disk though
+    key_manager = KeyManager()    
+    root_capability = Capability(role="crypto_service")
 
     # Init the file for output
     initfilesend()
