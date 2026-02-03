@@ -124,7 +124,7 @@ class KeyManager:
     # ---------------------------
     # Create a new keyring
     # ---------------------------
-    def init_keyring_with_header(self, password: str, session_key: bytes, cap: Capability) -> str:
+    def init_keyring_with_header(self, password: str, session_key: bytes, cap: Capability, id: str) -> str:
         if os.path.exists(self.keyring_path):
             raise FileExistsError("keyring already exists")
 
@@ -134,7 +134,7 @@ class KeyManager:
 
         # Generate initial DEK (Data Encryption Key) used for actual message encryption
         dek = session_key # This needs to be the session key
-        key_id = f"k{int(time.time())}"
+        key_id = id
 
         # This should be authorized required
         self._require_auth(cap, key_id, "key_creation")
@@ -166,9 +166,12 @@ class KeyManager:
     # ---------------------------
     # Load the keyring
     # ---------------------------
-    def load_keyring(self, password: str) -> Dict[str, Any]:
+    def load_keyring(self, password: str, cap: Capability) -> Dict[str, Any]:
         if not os.path.exists(self.keyring_path):
             raise FileNotFoundError("keyring not found; run init_keyring_with_header first")
+
+        # Should be authorized
+        self._require_auth(cap, "N/A", "keyring_load")
 
         blob = open(self.keyring_path, "rb").read()
 
@@ -248,7 +251,7 @@ class KeyManager:
     # ---------------------------
     # Key rotation
     # ---------------------------
-    def rotate_key(self, ring: Dict[str, Any], cap: Capability, session_key: bytes) -> str:
+    def rotate_key(self, ring: Dict[str, Any], cap: Capability, session_key: bytes, id: str) -> str:
         active = ring["active_key_id"]
         self._require_auth(cap, active, "rotate_key")
 
@@ -258,7 +261,7 @@ class KeyManager:
 
         # Create new active key
         new_dek = session_key
-        new_id = f"k{int(time.time())}"
+        new_id = id
         ring["keys"][new_id] = {
             "wrapped_dek": self.wrap_dek(ring["_master_key"], new_dek),
             "status": "active",

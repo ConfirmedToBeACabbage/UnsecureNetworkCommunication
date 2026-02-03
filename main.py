@@ -43,8 +43,8 @@ async def handshake(manager: KeyManager, root_capability: Capability, demonstrat
 
     # We receive the public key 
     convert = response.json()
-    if session_key != '': 
-        public_key = loadpubk(DecryptMSG(session_key, convert["pubk"])) # We are storing the public key 
+    if demonstration_step >= 1: 
+        public_key = loadpubk(DecryptMSG(manager.get_active_dek(manager.load_keyring("supersecretpassword", root_capability), root_capability), convert["pubk"])) # We are storing the public key 
     else: 
         public_key = loadpubk(convert["pubk"]) # We are storing the public key 
         
@@ -69,19 +69,19 @@ async def handshake(manager: KeyManager, root_capability: Capability, demonstrat
     # So now instead of us just making the session key, we use the key manager to make a ring, store it and then retrieve it later.
     # We also can use the manager to rotate the key if required. So we always technically have a key.
     try: 
-        manager.init_keyring_with_header("supersecretpassword", PerformHKDF(private_key, public_key), root_capability) # Here we are storing a session key
+        manager.init_keyring_with_header("supersecretpassword", PerformHKDF(private_key, public_key), root_capability, "client_key_1") # Here we are storing a session key
     except FileExistsError as e: # However if the file already exists, that means we simply need to rotate them
         printtofile("[CLIENT] Keyring already exists. Continuing...")
-    finally: # This is what happens if the file exists, we simply rotate the keys
+        
         # Demonstrate that rotation will not let us read the old information
         printtofile("[CLIENT] Rotating keys for forward secrecy demonstration.")
         printtofile("[CLIENT] Getting the old key ring to show that we won't be able to extract the dek after rotation.")
         old_keyring = manager.load_keyring("supersecretpassword", root_capability)
 
-        manager.rotate_key(manager.load_keyring("supersecretpassword", root_capability), root_capability, PerformHKDF(private_key, public_key))
+        manager.rotate_key(manager.load_keyring("supersecretpassword", root_capability), root_capability, PerformHKDF(private_key, public_key), "client_key_2")
         
         printtofile("[CLIENT] Attempting to get the old DEK after rotation, it won't be able to")
-        manager.get_active_dek(old_keyring, root_capability) # This should error out if we try to get the old key
+        manager.get_active_dek(old_keyring, root_capability) 
 
     # Sending a post request with the public keyy
     if(demonstration_step >= 1): 
@@ -94,7 +94,7 @@ async def handshake(manager: KeyManager, root_capability: Capability, demonstrat
 
 
 async def demonstration(manager: KeyManager, root_capability: Capability):
-    global private_key, public_key, session_key, parameters, e
+    global private_key, public_key, parameters, e
 
     printtofile("[CLIENT] I want to start my first handshake with the server!")
     # Do one handshake
@@ -179,4 +179,4 @@ if __name__ == "__main__":
     # Let the server start
     time.sleep(1)
 
-    asyncio.run(demonstration())
+    asyncio.run(demonstration(key_manager, root_capability))
