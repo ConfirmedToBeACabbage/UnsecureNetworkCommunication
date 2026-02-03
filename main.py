@@ -34,7 +34,7 @@ Man in the middle can hurt this process. However this is where certificate autho
 (5) Decrypt on the server and present it as proof! 
 """ 
 
-async def handshake(manager: KeyManager, root_capability: Capability): 
+async def handshake(manager: KeyManager, root_capability: Capability, demonstration_step: int): 
     global private_key, public_key, parameters
     url = "http://localhost:8000/ping"
     
@@ -64,33 +64,49 @@ async def handshake(manager: KeyManager, root_capability: Capability):
     # Send back the server the public key
     url = "http://localhost:8000/public"
 
-    if session_key != '':
-        pubk = EncryptMSSG(session_key, pubk)
-
-    # Sending a post request with the public keyy
-    response = requests.post(url, json={"pubk": pubk.decode('utf-8')})
-
-    # Now that we've sent the post, we can generate on our end the session key
-    #session_key = PerformHKDF(private_key, public_key)
+    # if session_key != '':
+    #     pubk = EncryptMSSG(session_key, pubk)
     # So now instead of us just making the session key, we use the key manager to make a ring, store it and then retrieve it later.
+    # We also can use the manager to rotate the key if required. So we always technically have a key.
     try: 
         manager.init_keyring_with_header("supersecretpassword", PerformHKDF(private_key, public_key), root_capability) # Here we are storing a session key
     except FileExistsError as e: # However if the file already exists, that means we simply need to rotate them
         printtofile("[CLIENT] Keyring already exists. Continuing...")
     finally: # This is what happens if the file exists, we simply rotate the keys
+        # Demonstrate that rotation will not let us read the old information
+        printtofile("[CLIENT] Rotating keys for forward secrecy demonstration.")
+        printtofile("[CLIENT] Getting the old key ring to show that we won't be able to extract the dek after rotation.")
+        old_keyring = manager.load_keyring("supersecretpassword", root_capability)
+
         manager.rotate_key(manager.load_keyring("supersecretpassword", root_capability), root_capability, PerformHKDF(private_key, public_key))
+        
+        printtofile("[CLIENT] Attempting to get the old DEK after rotation, it won't be able to")
+        manager.get_active_dek(old_keyring, root_capability) # This should error out if we try to get the old key
+
+    # Sending a post request with the public keyy
+    if(demonstration_step >= 1): 
+        pubk = EncryptMSSG(manager.get_active_dek(manager.load_keyring("supersecretpassword", root_capability), root_capability), pubk)
+
+    response = requests.post(url, json={"pubk": pubk.decode('utf-8')})
+
+    # Now that we've sent the post, we can generate on our end the session key
+    #session_key = PerformHKDF(private_key, public_key)
+
 
 async def demonstration(manager: KeyManager, root_capability: Capability):
     global private_key, public_key, session_key, parameters, e
 
     printtofile("[CLIENT] I want to start my first handshake with the server!")
     # Do one handshake
-    await handshake()
+    await handshake(manager, root_capability, 0)
 
     printtofile("[CLIENT] Doing my second handshake with the server for forward secrecy!")
     # However now that we've done this once 
     # For forward secrecy we do it again with the session key
-    await handshake()
+    await handshake(manager, root_capability, 1)
+
+    # This is for demonstration of old information
+    await handshake(manager, root_capability, 2)
     
     printtofile("[CLIENT] With forward secrecy established, we will now encrypt a message over the secure channel")
 
@@ -116,6 +132,15 @@ async def demonstration(manager: KeyManager, root_capability: Capability):
     #emsg = EncryptMSSG(session_key, emsg)
     ekey = EncryptMSSG(manager.get_active_dek(manager.load_keyring("supersecretpassword", root_capability), root_capability), key)
     emsg = EncryptMSSG(manager.get_active_dek(manager.load_keyring("supersecretpassword", root_capability), root_capability), emsg)
+
+    # Simulation of wrong access role
+    fake_capability = Capability(role="unauthorized_role")
+    try: 
+        ekey = EncryptMSSG(manager.get_active_dek(manager.load_keyring("supersecretpassword", fake_capability), fake_capability), key)
+    except PermissionError as pe:
+        printtofile("[CLIENT] Permission Error Caught Successfully: " + str(pe))   
+    finally:
+        printtofile("[CLIENT] Continuing...")
 
     printtofile("[CLIENT] Encrypted key (with session key): " + ekey.decode('utf-8'))
     printtofile("[CLIENT] Encrypted message (with session key): " + emsg.decode('utf-8'))

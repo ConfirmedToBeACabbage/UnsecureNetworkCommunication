@@ -72,6 +72,10 @@ def derive_master_key(password: str, salt: bytes) -> bytes:
 class Capability:
     role: str
 
+@dataclass(frozen=True)
+class Capability_Fake():
+    role: str = "unauthorized_role"
+
 class KeyManager:
     def __init__(self, keyring_path: str = "keyring.enc", log_path: str = "key_usage.log"):
         self.keyring_path = keyring_path
